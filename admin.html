@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Riverdam Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="logo">Riverdam Admin</h1>
+      <nav>
+        <a href="index.html">Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section>
+      <h2>Bookings</h2>
+      <div id="admin-area">
+        <p id="admin-message">Checking access...</p>
+      </div>
+      <div class="admin-actions">
+        <button id="export-csv" class="btn">Export CSV</button>
+        <button id="clear-bookings" class="btn danger">Clear all</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container"><small>Admin view — demo only</small></div>
+  </footer>
+
+  <script>
+    // Simple password prompt for demo only — change in production!
+    (function () {
+      const ADMIN_PASS = 'riverdam-admin'; // change this before sharing
+      const entered = prompt('Enter admin password:');
+      const adminArea = document.getElementById('admin-area');
+      const msg = document.getElementById('admin-message');
+
+      if (entered !== ADMIN_PASS) {
+        msg.textContent = 'Access denied. Wrong password.';
+        return;
+      }
+
+      msg.style.display = 'none';
+
+      function loadBookings() {
+        const data = JSON.parse(localStorage.getItem('riverdam_bookings') || '[]');
+        if (data.length === 0) {
+          adminArea.innerHTML = '<p>No bookings yet.</p>';
+          return;
+        }
+        const table = document.createElement('table');
+        table.className = 'bookings-table';
+        table.innerHTML = `
+          <thead><tr><th>#</th><th>Name</th><th>Email</th><th>Room</th><th>Check-in</th><th>Check-out</th><th>Created</th></tr></thead>
+        `;
+        const tbody = document.createElement('tbody');
+        data.forEach((b, i) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${i+1}</td>
+            <td>${escapeHtml(b.name)}</td>
+            <td>${escapeHtml(b.email)}</td>
+            <td>${escapeHtml(b.room)}</td>
+            <td>${b.start_date}</td>
+            <td>${b.end_date}</td>
+            <td>${new Date(b.created_at).toLocaleString()}</td>`;
+          tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        adminArea.innerHTML = '';
+        adminArea.appendChild(table);
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m];});
+      }
+
+      document.getElementById('export-csv').addEventListener('click', function () {
+        const data = JSON.parse(localStorage.getItem('riverdam_bookings') || '[]');
+        if (data.length === 0) { alert('No bookings to export'); return; }
+        const rows = [
+          ['name','email','room','start_date','end_date','created_at'],
+          ...data.map(b => [b.name, b.email, b.room, b.start_date, b.end_date, b.created_at])
+        ];
+        const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+        const blob = new Blob([csv], {type: 'text/csv'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'riverdam_bookings.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      document.getElementById('clear-bookings').addEventListener('click', function () {
+        if (!confirm('Clear all bookings?')) return;
+        localStorage.removeItem('riverdam_bookings');
+        loadBookings();
+      });
+
+      loadBookings();
+    })();
+  </script>
+</body>
+</html>
