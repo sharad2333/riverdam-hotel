@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Riverdam Hotel</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="logo">Riverdam Hotel</h1>
+      <nav>
+        <a href="#home">Home</a>
+        <a href="#rooms">Rooms</a>
+        <a href="#book">Book</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero container">
+      <h2>Welcome to Riverdam</h2>
+      <p>A cozy riverside hotel — simple booking demo for your portfolio.</p>
+      <a class="btn" href="#rooms">View Rooms</a>
+    </section>
+
+    <section id="rooms" class="container rooms">
+      <h3>Rooms</h3>
+      <div class="room-list">
+        <article class="room" data-room="Standard">
+          <img src="https://via.placeholder.com/400x240?text=Standard" alt="Standard room">
+          <h4>Standard Room</h4>
+          <p>Comfortable, single/double, free wifi. ₹3000/night</p>
+          <button class="btn book-btn">Book</button>
+        </article>
+
+        <article class="room" data-room="Deluxe">
+          <img src="https://via.placeholder.com/400x240?text=Deluxe" alt="Deluxe room">
+          <h4>Deluxe Room</h4>
+          <p>Spacious room with river view. ₹4500/night</p>
+          <button class="btn book-btn">Book</button>
+        </article>
+
+        <article class="room" data-room="Suite">
+          <img src="https://via.placeholder.com/400x240?text=Suite" alt="Suite">
+          <h4>Suite</h4>
+          <p>Luxury suite with balcony. ₹7500/night</p>
+          <button class="btn book-btn">Book</button>
+        </article>
+      </div>
+    </section>
+
+    <section id="book" class="container booking">
+      <h3>Make a Booking</h3>
+      <form id="booking-form">
+        <label>
+          Full name
+          <input type="text" name="name" id="name" required />
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" id="email" required />
+        </label>
+        <label>
+          Room
+          <select name="room" id="room">
+            <option>Standard</option>
+            <option>Deluxe</option>
+            <option>Suite</option>
+          </select>
+        </label>
+        <label>
+          Check-in
+          <input type="date" id="start_date" required />
+        </label>
+        <label>
+          Check-out
+          <input type="date" id="end_date" required />
+        </label>
+        <div class="actions">
+          <button type="submit" class="btn">Confirm Booking</button>
+        </div>
+      </form>
+
+      <div id="confirmation" class="confirmation" aria-live="polite"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>Riverdam Hotel — sample project · Built by you</small>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
